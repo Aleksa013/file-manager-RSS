@@ -1,23 +1,26 @@
 import process from "node:process"
-import { argv, exit, stdin } from "node:process"
+import { exit, stdin, env } from "node:process"
+
+
+import { getGreeting } from "../utils.js";
+import { goUp } from "../nwd/up.js";
+
+const userName = env.npm_config_username;
 
 
 const sayWelcome = () => {
-   const userName =  argv.toSpliced(0,2).filter((arg)=> {
-    if(arg.startsWith('--username')){
-        return arg
-    }
-    })
-    console.log(`Welcome to the File Manager, ${userName[0].split('=')[1]}!`)    
+    console.log(getGreeting(userName, 'welcome'))    
     stdin.on('data', (chunk) => {
         if(chunk.toString().trim() === '.exit'){
-            console.log(`Thank you for using File Manager,${userName[0].split('=')[1]}, goodbye!`) 
+            console.log(getGreeting(userName, 'goodbye')) 
             exit(1)
         }
+        if(chunk.toString().trim() === 'up'){
+            goUp()
+        }
     });
-
     process.on('SIGINT', () => {
-        console.log(`Thank you for using File Manager,${userName[0].split('=')[1]}, goodbye!`)  
+        console.log(getGreeting(userName, 'goodbye'))  
     })
 }
 
