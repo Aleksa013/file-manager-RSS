@@ -1,9 +1,14 @@
 import { chdir } from "node:process"
+import { isAbsolute, resolve } from "node:path"
+import { getLocation } from "../utils.js"
 
 export const doCD = (path) => {
     try{
-        chdir(path)
+        isAbsolute(path) 
+        ?chdir(path)
+        :chdir(resolve(path))
+        getLocation()
     }catch(error){
-        throw new Error(`Error: `+error)
+        console.error('Operation failed')
     }
 }

@@ -1,16 +1,18 @@
+import { sep } from "node:path";
 import { chdir, cwd } from "node:process"
+import { getLocation } from "../utils.js"
 
 export const goUp = () => {
     const pathUp = cwd()
-    .split('\\')
+    .split(sep)
     .slice(0, -1)
-    .join('\\')
+    .join(sep)
     try {
         chdir(pathUp);
         console.log(`Новый каталог: ${cwd()}`);
-        console.log(pathUp)
+        getLocation()
     } catch (err) {
-        console.error(`chdir: ${err}`);
+        console.error('Operation failed')
     }
 }
 
