@@ -13,6 +13,8 @@ import { renameFile } from "../basic/renameFile.js";
 import { copyFile } from "../basic/copyFile.js";
 import { deleteFile } from "../basic/deleteFile.js";
 import { calculateHash } from "../hash/calculateHash.js";
+import { compressFile } from "../compressOperations/compress.js";
+import { decompressFile } from "../compressOperations/decompress.js";
 
 const userName = env.npm_config_username ?env.npm_config_username: argv[2].split('=')[1] ;
 const allCommands = [...commands, ...onePathCommands, ...twoPathsCommands]
@@ -62,6 +64,12 @@ const processRequest = async() => {
         }
         if(stringChunk.startsWith('hash')){
             calculateHash(stringChunk.split(' ')[1])
+        }
+        if(stringChunk.startsWith('compress')){
+            compressFile(stringChunk.split(' ')[1], stringChunk.split(' ')[2])
+        }
+        if(stringChunk.startsWith('decompress')){
+            decompressFile(stringChunk.split(' ')[1], stringChunk.split(' ')[2])
         }
     });
     process.on('SIGINT', () => {

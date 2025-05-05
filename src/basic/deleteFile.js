@@ -1,5 +1,4 @@
 import { rm , stat } from "node:fs"
-import { cwd } from "node:process"
 import { getLocation } from "../utils.js"
 
 export const deleteFile = async(path) => {
@@ -7,7 +6,10 @@ export const deleteFile = async(path) => {
        stat(path,{}, (err, stats) => {
         if(stats.isFile()){
             rm(path, (err) => {
-                console.error('Operation failed')
+                if(err){
+                    console.error('Operation failed')
+                }
+                
             })
             getLocation()
         } else {
