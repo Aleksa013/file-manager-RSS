@@ -4,7 +4,7 @@ import { getLocation } from "../utils.js"
 
 export const goUp = () => {
     const pathUp = cwd()
-    .split(sep)
+    .split(/[\\]/)
     .slice(0, -1)
     .join(sep)
     try {
