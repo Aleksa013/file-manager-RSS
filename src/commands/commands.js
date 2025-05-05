@@ -1,4 +1,4 @@
-export const commands = ['up','cd','ls', '.exit']
+export const commands = ['up', 'cd','ls', '.exit']
 
 export const onePathCommands = ['cat', 'add', 'mkdir', 'hash','rm']
 

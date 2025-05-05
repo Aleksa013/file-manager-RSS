@@ -1,8 +1,8 @@
 import process from "node:process"
 import { exit, stdin, env, argv } from "node:process"
 
-import { commands, onePathCommands, twoPathsCommands } from "../commands/commands.js";
-import { getGreeting } from "../utils.js";
+// import { commands, onePathCommands, twoPathsCommands } from "../commands/commands.js";
+import { getGreeting , checkPrompt, getRelativePath} from "../utils.js";
 import { goUp } from "../nwd/up.js";
 import { doCD } from "../nwd/cd.js";
 import { getListOfContentDirectory } from "../nwd/ls.js";
@@ -16,17 +16,15 @@ import { calculateHash } from "../hash/calculateHash.js";
 import { compressFile } from "../compressOperations/compress.js";
 import { decompressFile } from "../compressOperations/decompress.js";
 
+
 const userName = env.npm_config_username ?env.npm_config_username: argv[2].split('=')[1] ;
-const allCommands = [...commands, ...onePathCommands, ...twoPathsCommands]
+
 const processRequest = async() => {
     stdin.on('data', (chunk) => {
         const stringChunk = chunk.toString().trim()
-        if(!allCommands.includes(stringChunk.split(' ')[0]) || 
-            twoPathsCommands.includes(stringChunk.split(' ')[0])&& stringChunk.split(' ').length !== 3 ||
-            onePathCommands.includes(stringChunk.split(' ')[0])&& stringChunk.split(' ').length !== 2 ||
-            commands.includes(stringChunk.split(' ')[0]) && stringChunk.split(' ').length !== 1){
+        if(!checkPrompt(stringChunk)){
             console.error('Invalid input!')
-        }
+        } else {
         if(stringChunk === '.exit'){
             console.log(getGreeting(userName, 'goodbye')) 
             exit(1)
@@ -41,36 +39,37 @@ const processRequest = async() => {
             getListOfContentDirectory()
         }
         if(stringChunk.startsWith('cat')){
-            readFile(stringChunk.split(' ')[1])
+            readFile(getRelativePath(stringChunk.split(' ')[1]))
         }
         if(stringChunk.startsWith('add')){
-            createEmptyFile(stringChunk.split(' ')[1])
+            createEmptyFile(getRelativePath(stringChunk.split(' ')[1]))
         }
         if(stringChunk.startsWith('mkdir')){
-            createNewDir(stringChunk.split(' ')[1])
+            createNewDir(getRelativePath(stringChunk.split(' ')[1]))
         }   
         if(stringChunk.startsWith('rename')){
-            renameFile(stringChunk.split(' ')[1], stringChunk.split(' ')[2])
+            renameFile(getRelativePath(stringChunk.split(' ')[1]),getRelativePath(stringChunk.split(' ')[2]))
         }     
         if(stringChunk.startsWith('cp')){
-            copyFile(stringChunk.split(' ')[1], stringChunk.split(' ')[2])
+            copyFile(getRelativePath(stringChunk.split(' ')[1]),getRelativePath(stringChunk.split(' ')[2]))
         }   
         if(stringChunk.startsWith('mv')){
-            copyFile(stringChunk.split(' ')[1], stringChunk.split(' ')[2])
-            deleteFile(stringChunk.split(' ')[1])
+            copyFile(getRelativePath(stringChunk.split(' ')[1]),getRelativePath(stringChunk.split(' ')[2]), 'move')
+            deleteFile(getRelativePath(stringChunk.split(' ')[1]))
         }
         if(stringChunk.startsWith('rm')){
-            deleteFile(stringChunk.split(' ')[1])
+            deleteFile(getRelativePath(stringChunk.split(' ')[1]))
         }
         if(stringChunk.startsWith('hash')){
-            calculateHash(stringChunk.split(' ')[1])
+            calculateHash(getRelativePath(stringChunk.split(' ')[1]))
         }
         if(stringChunk.startsWith('compress')){
-            compressFile(stringChunk.split(' ')[1], stringChunk.split(' ')[2])
+            compressFile(getRelativePath(stringChunk.split(' ')[1]),getRelativePath(stringChunk.split(' ')[2]))
         }
         if(stringChunk.startsWith('decompress')){
-            decompressFile(stringChunk.split(' ')[1], stringChunk.split(' ')[2])
+            decompressFile(getRelativePath(stringChunk.split(' ')[1]),getRelativePath(stringChunk.split(' ')[2]))
         }
+    }
     });
     process.on('SIGINT', () => {
         console.log(getGreeting(userName, 'goodbye')) 

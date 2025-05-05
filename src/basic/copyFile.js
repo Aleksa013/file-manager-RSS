@@ -6,14 +6,14 @@ import { pipeline } from "node:stream/promises"
 import { getLocation } from "../utils.js"
 
 
-export const copyFile = async(pathOldFile, pathNewFile) => {
+export const copyFile = async(pathOldFile, pathNewFile, mode = 'copy') => {
    const newPath =  isAbsolute(pathNewFile)? pathNewFile: resolve(cwd(), pathNewFile)
     const oldPath = isAbsolute(pathOldFile)? pathOldFile: resolve(cwd(), pathOldFile)
    try{
     const rs = createReadStream(oldPath)
     const ws = createWriteStream(newPath)
    await pipeline(rs, ws);
-    getLocation()
+    mode === 'move'? '': getLocation()
    
    }catch{
     console.error('Operation failed')
