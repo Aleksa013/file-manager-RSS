@@ -5,6 +5,6 @@ export const renameFile = async(oldName, newName) => {
     try{
         rename(oldName, newName)
     }catch(error){
-        console.error('Operation Failed')
+        throw new Error('Operation Failed')
     }
 }

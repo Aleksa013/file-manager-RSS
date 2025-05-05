@@ -11,6 +11,8 @@ import { readFile } from "../basic/cat.js";
 import { createEmptyFile } from "../basic/createEmptyFile.js";
 import { createNewDir } from "../basic/createNewDir.js";
 import { renameFile } from "../basic/renameFile.js";
+import { copyFile } from "../basic/copyFile.js";
+import { deleteFile } from "../basic/deleteFile.js";
 
 const userName = env.npm_config_username ?env.npm_config_username: argv[2].split('=')[1] ;
 
@@ -41,7 +43,17 @@ const processRequest = async() => {
         }   
         if(stringChunk.startsWith('rename')){
             renameFile(stringChunk.split(' ')[1], stringChunk.split(' ')[2])
-        }       
+        }     
+        if(stringChunk.startsWith('cp')){
+            copyFile(stringChunk.split(' ')[1], stringChunk.split(' ')[2])
+        }   
+        if(stringChunk.startsWith('mv')){
+            copyFile(stringChunk.split(' ')[1], stringChunk.split(' ')[2])
+            deleteFile(stringChunk.split(' ')[1])
+        }
+        if(stringChunk.startsWith('rm')){
+            deleteFile(stringChunk.split(' ')[1])
+        }
     });
     process.on('SIGINT', () => {
         console.log(getGreeting(userName, 'goodbye')) 

@@ -1,20 +1,24 @@
-import { error } from "node:console";
 import constants from "node:constants";
-import { createReadStream, access } from "node:fs"
-import { isAbsolute, resolve } from "node:path";
-import { homedir } from 'node:os'
+import { access } from "node:fs/promises"
+import { createReadStream } from "node:fs"
+import { relative } from "node:path";
+import { cwd } from "node:process";
+import { getLocation } from './../utils.js'
+
 
 export const readFile = async(path) => {
-    isAbsolute(path)? path : resolve(homedir(), path)
-    if(access(path, constants.F_OK, (err) => console.error(err))){
+    const fullPath = relative(cwd(), path) === path ? cwd()+'\\'+ path : relative(cwd(), path)  
         try{
-           const rs = createReadStream(path)
-           rs.on('data',(chunk) => {
+          await access(fullPath, constants.R_OK)
+          const rs = createReadStream(fullPath)
+          rs.on('data', (chunk) => {
             console.log(chunk.toString())
-            });
-        }catch(err){
-            console.error('Operation failed', error)
+            getLocation();
+          })
+          
+        }catch{
+            throw new Error('Operation failed')
         }
-    }
+    
        
 }
