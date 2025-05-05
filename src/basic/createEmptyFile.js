@@ -7,6 +7,6 @@ export const createEmptyFile = async(fileName)=> {
          createWriteStream(cwd()+'\\'+fileName)
          getLocation()
     }catch{
-        throw new Error('Operation failed')
+        console.error('Operation failed')
     }
 }

@@ -14,10 +14,9 @@ export const readFile = async(path) => {
           rs.on('data', (chunk) => {
             console.log(chunk.toString())
             getLocation();
-          })
-          
+          })          
         }catch{
-            throw new Error('Operation failed')
+            console.errorr('Operation failed')
         }
     
        

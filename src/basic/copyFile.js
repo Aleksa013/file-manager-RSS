@@ -16,6 +16,6 @@ export const copyFile = async(pathOldFile, pathNewFile) => {
     getLocation()
    
    }catch{
-    throw new Error('Operation failed')
+    console.error('Operation failed')
    }
 }

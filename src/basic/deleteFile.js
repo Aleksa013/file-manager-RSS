@@ -7,14 +7,14 @@ export const deleteFile = async(path) => {
        stat(path,{}, (err, stats) => {
         if(stats.isFile()){
             rm(path, (err) => {
-                throw new Error('Operation failed')
+                console.error('Operation failed')
             })
             getLocation()
         } else {
-            throw new Error('Invalid input')
+            console.error('Invalid input')
         }
        })
     }catch{
-        throw new Error('Operation failed')
+        console.error('Operation failed')
     }
 }

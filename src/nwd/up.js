@@ -9,7 +9,6 @@ export const goUp = () => {
     .join(sep)
     try {
         chdir(pathUp);
-        console.log(`Новый каталог: ${cwd()}`);
         getLocation()
     } catch (err) {
         console.error('Operation failed')

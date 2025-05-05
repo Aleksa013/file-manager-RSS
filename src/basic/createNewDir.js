@@ -5,6 +5,6 @@ export const createNewDir = async(dirName) => {
     try{
         mkdir(cwd()+'\\'+dirName);
     }catch{
-        throw new Error('Operation failed')
+        console.error('Operation failed')
     }
 }

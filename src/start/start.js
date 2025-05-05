@@ -1,8 +1,7 @@
 import process from "node:process"
 import { exit, stdin, env, argv } from "node:process"
 
-
-
+import { commands, onePathCommands, twoPathsCommands } from "../commands/commands.js";
 import { getGreeting } from "../utils.js";
 import { goUp } from "../nwd/up.js";
 import { doCD } from "../nwd/cd.js";
@@ -13,12 +12,19 @@ import { createNewDir } from "../basic/createNewDir.js";
 import { renameFile } from "../basic/renameFile.js";
 import { copyFile } from "../basic/copyFile.js";
 import { deleteFile } from "../basic/deleteFile.js";
+import { calculateHash } from "../hash/calculateHash.js";
 
 const userName = env.npm_config_username ?env.npm_config_username: argv[2].split('=')[1] ;
-
+const allCommands = [...commands, ...onePathCommands, ...twoPathsCommands]
 const processRequest = async() => {
     stdin.on('data', (chunk) => {
         const stringChunk = chunk.toString().trim()
+        if(!allCommands.includes(stringChunk.split(' ')[0]) || 
+            twoPathsCommands.includes(stringChunk.split(' ')[0])&& stringChunk.split(' ').length !== 3 ||
+            onePathCommands.includes(stringChunk.split(' ')[0])&& stringChunk.split(' ').length !== 2 ||
+            commands.includes(stringChunk.split(' ')[0]) && stringChunk.split(' ').length !== 1){
+            console.error('Invalid input!')
+        }
         if(stringChunk === '.exit'){
             console.log(getGreeting(userName, 'goodbye')) 
             exit(1)
@@ -53,6 +59,9 @@ const processRequest = async() => {
         }
         if(stringChunk.startsWith('rm')){
             deleteFile(stringChunk.split(' ')[1])
+        }
+        if(stringChunk.startsWith('hash')){
+            calculateHash(stringChunk.split(' ')[1])
         }
     });
     process.on('SIGINT', () => {

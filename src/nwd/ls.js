@@ -3,12 +3,9 @@ import { cwd } from "node:process"
 import { getLocation } from "../utils.js"
 
 
-
 export const getListOfContentDirectory = async() => {
-    console.log('one')
     try{
         const path =cwd()
-        console.log(path, 'first')
         const dirs = []
         const files = []
         const content = await readdir(path, { withFileTypes: true})
@@ -19,9 +16,7 @@ export const getListOfContentDirectory = async() => {
             })
         const list = [...dirs.sort((a, b) => a.Name.localeCompare(b.Name)),...(files.sort((a, b) => a.Name.localeCompare(b.Name)))]
         console.table(list)
-        getLocation()
-
-        
+        getLocation()        
     }catch{
         console.error('Operation failed')
     }
