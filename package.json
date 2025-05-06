@@ -1,0 +1,25 @@
+{
+  "name": "file-manager-rss",
+  "version": "1.0.0",
+  "description": "this is the RSS study project",
+   "keywords": [
+    "rss",
+    "nodejs"
+  ],
+  "homepage": "https://github.com/Aleksa013/file-manager-RSS#readme",
+  "bugs": {
+    "url": "https://github.com/Aleksa013/file-manager-RSS/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aleksa013/file-manager-RSS.git"
+  },
+  "license": "ISC",
+  "author": "Aleksa013",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/start/start.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
